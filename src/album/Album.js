@@ -13,6 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
+import courses from "./courses.json"
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 function Copyright() {
   return (
@@ -59,10 +64,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+function  handleChangeCategory () {
+
+}
+
 
 export default function Album() {
   const classes = useStyles();
+
+  const [category, setCategory] = React.useState('');
+
+  const handleChangeCategory = (event) => {
+    setCategory(event.target.value);
+  };
+
+
+  const etiquetas = [...new Set(courses.map(course => course.Etiquetas))].sort()
 
   return (
     <React.Fragment>
@@ -79,59 +97,51 @@ export default function Album() {
         {/* Hero unit */}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="textPrimary"
-              gutterBottom
-            >
-              Album layout
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-            >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
-            </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Button variant="contained" color="primary">
-                    Main call to action
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Secondary action
-                  </Button>
-                </Grid>
-              </Grid>
+            <div style={{ width: 600 }}>
+              <Autocomplete
+                id="free-solo-demo"
+                freeSolo
+                options={courses.map((course) => course.Curso || '')}
+                renderInput={(params) => (
+                  <TextField {...params} label="freeSolo" margin="normal" variant="outlined" />
+                )}
+              />
             </div>
+            <Select
+              label="Selecciona la categoría"
+              id="demo-simple-select"
+              value={''}
+              onChange={handleChangeCategory}
+            >
+              {etiquetas.map(etiqueta => 
+                <MenuItem value={etiqueta}>{etiqueta}</MenuItem>
+              )}
+        </Select>
           </Container>
         </div>
+
+
+
+
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {courses.map((course, index) => (
+              <Grid item key={index} xs={12} sm={6} md={4}>
+                {console.log(course)}
+                {console.log(course.Images)}
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={course.Images}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {course.Curso}
                     </Typography>
                     <Typography>
-                      This is a media card. You can use this section to describe
-                      the content.
+                     {course.Descripción}
                     </Typography>
                   </CardContent>
                   <CardActions>
